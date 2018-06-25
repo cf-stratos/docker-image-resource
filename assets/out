@@ -61,7 +61,8 @@ additional_tags=$(jq -r '.params.additional_tags // ""' < $payload)
 need_tag_as_latest=$(jq -r '.params.tag_as_latest // "false"' < $payload)
 build_args=$(jq -r '.params.build_args // {}' < $payload)
 build_args_file=$(jq -r '.params.build_args_file // ""' < $payload)
-
+patch_base_reg=$(jq -r '.params.patch_base_reg // ""' < $payload)
+patch_base_tag=$(jq -r '.params.patch_base_tag // ""' < $payload)
 
 tag_name=""
 if [ -n "$tag_params" ]; then
@@ -115,6 +116,15 @@ elif [ -n "$build" ]; then
     echo "It doesn't appear that given Dockerfile: \"$dockerfile\" is a file"
     exit 1
   fi
+
+  # Patch Base registry in Dockerfile
+  # Must be '@' delimited
+if [ -n "${patch_base_reg}" ]; then
+  sed -i "s@${patch_base_reg}@g" ${dockerfile}
+fi
+if [ -n "${patch_base_tag}" ]; then
+  sed -i "s@${patch_base_tag}@g" ${dockerfile}
+fi
 
   if [ -n "$load_base" ]; then
     docker load -i "${load_base}/image"
