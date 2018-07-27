@@ -107,6 +107,7 @@ import_file=$(jq -r '.params.import_file // ""' < $payload)
 pull_repository=$(jq -r '.params.pull_repository // ""' < $payload)
 pull_tag=$(jq -r '.params.pull_tag // "latest"' < $payload)
 target_name=$(jq -r '.params.target_name // ""' < $payload)
+prebuild_script=$(jq -r '.params.prebuild_script // ""' < $payload)
 
 if [ -n "$load" ]; then
   docker load -i "${load}/image"
@@ -122,6 +123,12 @@ elif [ -n "$build" ]; then
 if [ -n "${patch_base_reg}" ]; then
   sed -i "s@${patch_base_reg}@g" ${dockerfile}
 fi
+
+if [ -n "${prebuild_script}" ]; then
+  cd ${build}
+  ./${prebuild_script}
+fi
+
 if [ -n "${patch_base_tag}" ]; then
   sed -i "s@${patch_base_tag}@g" ${dockerfile}
 fi
