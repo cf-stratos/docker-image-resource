@@ -125,8 +125,10 @@ if [ -n "${patch_base_reg}" ]; then
 fi
 
 if [ -n "${prebuild_script}" ]; then
+  ROOT_DIR=$(pwd)
   cd ${build}
   ./${prebuild_script}
+  cd ${ROOT_DIR}
 fi
 
 if [ -n "${patch_base_tag}" ]; then
