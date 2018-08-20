@@ -181,6 +181,8 @@ version is the image's digest.
   prepended with this string. This is useful for adding `v` in front of version
   numbers.
 
+* `tag_commit`: *Optional.* If specified, the tag read from the file will be appended with the commit hash.
+
 * `tag_as_latest`: *Optional.*  Default `false`. If true, the pushed image will
   be tagged as `latest` in addition to whatever other tag was specified.
 

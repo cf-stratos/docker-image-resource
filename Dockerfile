@@ -8,7 +8,7 @@ RUN go build -o /assets/print-metadata github.com/concourse/docker-image-resourc
 RUN go build -o /assets/ecr-login github.com/concourse/docker-image-resource/vendor/github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cmd
 ENV CGO_ENABLED 1
 RUN set -e; for pkg in $(go list ./...); do \
-		go test -o "/tests/$(basename $pkg).test" -c $pkg; \
+	go test -o "/tests/$(basename $pkg).test" -c $pkg; \
 	done
 
 FROM alpine:edge AS resource
@@ -20,7 +20,7 @@ FROM resource AS tests
 COPY --from=builder /tests /tests
 ADD . /docker-image-resource
 RUN set -e; for test in /tests/*.test; do \
-		$test -ginkgo.v; \
+	$test -ginkgo.v; \
 	done
 
 FROM resource
